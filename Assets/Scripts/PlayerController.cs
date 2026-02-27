@@ -6,23 +6,39 @@ public class PlayerController : MonoBehaviour
     public float thrustForce = 1f;
     public float maxSpeed = 5f;
     public GameObject boosterFlame;
+    public GameObject explosionEffect;
     public UIDocument uiDocument;
     Rigidbody2D rb;
     private float elapsedTime = 0f;
     private float score = 0f;
     public float scoreMultiplier = 10f;
+
+    private Label scoreText;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        scoreText = uiDocument.rootVisualElement.Q<Label>("ScoreLabel");
     }
 
     // Update is called once per frame
     void Update()
     {
+        UpdateScore();
+        MovePlayer();
+    }
+
+    void UpdateScore()
+    {
         elapsedTime += Time.deltaTime;
         score = Mathf.FloorToInt(elapsedTime * scoreMultiplier);
+        scoreText.text = "Score: " + score;
         Debug.Log("Score: " + score);
+    }
+
+    void MovePlayer()
+    {
+
         if (Mouse.current.leftButton.isPressed)
         {
             // Calculate mouse direction
@@ -48,6 +64,7 @@ public class PlayerController : MonoBehaviour
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
+        Instantiate(explosionEffect, transform.position, transform.rotation);
         Destroy(gameObject);
     }
 }
