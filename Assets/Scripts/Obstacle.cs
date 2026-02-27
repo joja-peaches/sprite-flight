@@ -29,4 +29,13 @@ public class Obstacle : MonoBehaviour
     {
 
     }
+
+    void OnCollisionEnter2D(Collision2D collision)
+    {
+        Vector2 contactPoint = collision.GetContact(0).point;
+        GameObject bounceEffect = Instantiate(WallExplosionEffect, contactPoint, Quaternion.identity);
+
+        // Destroy the effect after 1  second
+        Destroy(bounceEffect, 1f);
+    }
 }
